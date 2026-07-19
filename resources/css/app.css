@@ -1,0 +1,19 @@
+@import "tailwindcss";
+
+@theme {
+    --color-brand-50: #eff6ff;
+    --color-brand-500: #3b82f6;
+    --color-brand-600: #2563eb;
+    --color-brand-700: #1d4ed8;
+    --font-sans: "Outfit", sans-serif;
+}
+
+@layer components {
+    .glass-panel {
+        @apply bg-white/70 backdrop-blur-md border border-white/40 rounded-2xl shadow-lg;
+    }
+
+    .glass-card {
+        @apply bg-white/60 backdrop-blur-sm rounded-xl shadow-md p-4;
+    }
+}
