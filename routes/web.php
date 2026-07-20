@@ -2,11 +2,23 @@
 
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\StockMutationController;
+use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Route;
 
-// TODO Role 1 (Rava): route login/logout, redirect halaman utama ke dashboard/login
-// TODO Role 3 (Haichal): route dashboard & laporan
-// TODO Role 4 (Aqila): route landing page publik
+// Redirect root to products or login based on auth status
+Route::get('/', function () {
+    return auth()->check()
+        ? redirect()->route('products.index')
+        : redirect()->route('login');
+});
+
+// Authentication routes
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [LoginController::class, 'login']);
+});
+
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout')->middleware('auth');
 
 // TEMP buat testing - HAPUS sebelum push/merge ke main
 Route::get('/dev-login', function () {
@@ -14,7 +26,18 @@ Route::get('/dev-login', function () {
     return redirect('/products');
 });
 
+// Routes protected by authentication
 Route::middleware('auth')->group(function () {
     Route::resource('products', ProductController::class)->except('show');
     Route::resource('stock-mutations', StockMutationController::class)->only(['index', 'create', 'store']);
+
+    // Contoh pembatasan rute per peran (Spatie RBAC middleware)
+    Route::middleware('role:Super Admin')->group(function () {
+        // Contoh rute khusus Super Admin
+        // Route::get('/reports', [ReportController::class, 'index']);
+    });
+
+    Route::middleware('role:Super Admin|Staff Gudang')->group(function () {
+        // Contoh rute yang bisa diakses Super Admin & Staff Gudang
+    });
 });

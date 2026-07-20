@@ -9,22 +9,21 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+    <!-- CDN Alpine.js for dropdowns & sidebar toggle until initialized in app.js by Role 4 -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="min-h-screen">
     <div class="flex">
-        {{-- TEMP sidebar — ganti dengan punya Rava (Role 1) begitu selesai --}}
-        <aside class="w-56 min-h-screen glass-panel m-2 p-4 hidden md:block">
-            <p class="text-brand-400 font-semibold mb-4">GudangSaaS</p>
-            <nav class="space-y-2 text-sm text-slate-300">
-                <a href="{{ route('products.index') }}" class="block hover:text-brand-400">Produk</a>
-                <a href="{{ route('stock-mutations.index') }}" class="block hover:text-brand-400">Mutasi Stok</a>
-            </nav>
-        </aside>
+        <x-sidebar />
 
-        <main class="flex-1 p-6">
-            @yield('content')
-        </main>
+        <div class="flex-1 flex flex-col min-h-screen">
+            <x-navbar />
+
+            <main class="flex-1 p-6">
+                @yield('content')
+            </main>
+        </div>
     </div>
 </body>
 </html>

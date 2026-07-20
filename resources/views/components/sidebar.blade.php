@@ -12,40 +12,39 @@
 @props(['active' => null])
 @php
 $navItems = [
-    ['key' => 'dashboard', 'label' => 'Dashboard',   'icon' => 'fa-solid fa-gauge-high',    'href' => url('/dashboard')],
-    ['key' => 'produk',    'label' => 'Produk',      'icon' => 'fa-solid fa-boxes-stacked',  'href' => url('/produk')],
-    ['key' => 'stok',      'label' => 'Stok',        'icon' => 'fa-solid fa-warehouse',      'href' => url('/stok')],
-    ['key' => 'mutasi',    'label' => 'Mutasi Stok', 'icon' => 'fa-solid fa-right-left',     'href' => url('/mutasi')],
-    ['key' => 'laporan',   'label' => 'Laporan',     'icon' => 'fa-solid fa-chart-column',   'href' => url('/laporan')],
-    ['key' => 'pengaturan','label' => 'Pengaturan',  'icon' => 'fa-solid fa-gear',           'href' => url('/pengaturan')],
+    ['key' => 'dashboard',       'label' => 'Dashboard',   'icon' => 'fa-solid fa-gauge-high',    'href' => url('/dashboard'),       'role' => null],
+    ['key' => 'products',        'label' => 'Produk',      'icon' => 'fa-solid fa-boxes-stacked',  'href' => route('products.index'), 'role' => null],
+    ['key' => 'stock-mutations', 'label' => 'Mutasi Stok', 'icon' => 'fa-solid fa-right-left',     'href' => route('stock-mutations.index'), 'role' => null],
+    ['key' => 'reports',         'label' => 'Laporan',     'icon' => 'fa-solid fa-chart-column',   'href' => url('/reports'),         'role' => 'Super Admin'],
 ];
 $current = $active ?? request()->segment(1);
 @endphp
 
+{{-- Overlay gelap di mobile saat sidebar terbuka --}}
 <div
     x-data
     x-init="if (!Alpine.store('sidebar')) Alpine.store('sidebar', { open: false })"
+    x-show="$store.sidebar.open"
+    x-transition.opacity
+    @click="$store.sidebar.open = false"
+    class="fixed inset-0 z-30 bg-slate-950/70 md:hidden"
+    style="display: none;"
+></div>
+
+<aside
+    x-data
+    x-init="if (!Alpine.store('sidebar')) Alpine.store('sidebar', { open: false })"
+    :class="$store.sidebar.open ? 'translate-x-0' : '-translate-x-full'"
+    class="glass-panel w-64 transform overflow-y-auto p-4 transition-transform duration-200 ease-in-out max-md:fixed max-md:inset-y-0 max-md:left-0 max-md:z-40 md:sticky md:top-0 md:h-screen md:translate-x-0 md:shrink-0"
 >
-    {{-- Overlay gelap di mobile saat sidebar terbuka --}}
-    <div
-        x-show="$store.sidebar.open"
-        x-transition.opacity
-        @click="$store.sidebar.open = false"
-        class="fixed inset-0 z-30 bg-slate-950/70 md:hidden"
-        style="display: none;"
-    ></div>
+    <div class="mb-6 flex items-center gap-2 px-2">
+        <i class="fa-solid fa-warehouse text-xl text-brand-400"></i>
+        <span class="font-sans text-lg font-semibold text-slate-100">GudangSaaS</span>
+    </div>
 
-    <aside
-        :class="$store.sidebar.open ? 'translate-x-0' : '-translate-x-full'"
-        class="glass-panel fixed inset-y-0 left-0 z-40 w-64 transform overflow-y-auto p-4 transition-transform duration-200 ease-in-out md:sticky md:top-0 md:h-screen md:translate-x-0 md:shrink-0"
-    >
-        <div class="mb-6 flex items-center gap-2 px-2">
-            <i class="fa-solid fa-warehouse text-xl text-brand-400"></i>
-            <span class="font-sans text-lg font-semibold text-slate-100">GudangSaaS</span>
-        </div>
-
-        <nav class="space-y-1">
-            @foreach ($navItems as $item)
+    <nav class="space-y-1">
+        @foreach ($navItems as $item)
+            @if (!$item['role'] || (auth()->check() && auth()->user()->hasRole($item['role'])))
                 <a
                     href="{{ $item['href'] }}"
                     @click="$store.sidebar.open = false"
@@ -57,7 +56,7 @@ $current = $active ?? request()->segment(1);
                     <i class="{{ $item['icon'] }} w-4 text-center"></i>
                     <span>{{ $item['label'] }}</span>
                 </a>
-            @endforeach
-        </nav>
-    </aside>
-</div>
+            @endif
+        @endforeach
+    </nav>
+</aside>
