@@ -2,24 +2,21 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    use WithoutModelEvents;
-
     /**
      * Seed the application's database.
+     *
+     * NOTE: RoleSeeder & UserSeeder punya Role 1 masih kosong.
+     * Begitu Rava selesai isi filenya, tambahin ke $this->call([...])
+     * di bawah ini (taruh SEBELUM ProductSeeder kalau UserSeeder butuh data role).
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        $this->call([
+            ProductSeeder::class,
         ]);
     }
 }
