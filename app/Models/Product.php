@@ -1,0 +1,38 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
+class Product extends Model
+{
+    use HasFactory;
+
+    protected $fillable = [
+        'category_id', 'supplier_id', 'sku', 'name', 'description',
+        'unit', 'price', 'cost_price', 'stock', 'minimum_stock',
+    ];
+
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    public function supplier(): BelongsTo
+    {
+        return $this->belongsTo(Supplier::class);
+    }
+
+    public function stockMutations(): HasMany
+    {
+        return $this->hasMany(StockMutation::class);
+    }
+
+    public function isLowStock(): bool
+    {
+        return $this->stock < $this->minimum_stock;
+    }
+}
