@@ -6,16 +6,36 @@
         active  => key menu yang lagi aktif, contoh: <x-sidebar active="produk" />
                    kalau nggak diisi, dideteksi otomatis dari segment pertama URL.
 
-    Catatan: href di bawah masih pakai path polos (url('/produk'), dst).
-    Sesuaikan ke route() yang sebenarnya dipakai di project (mis. route('produk.index')).
+    Catatan: role => null  = semua role bisa lihat.
+             role => ['Super Admin'] = hanya role tertentu yang bisa lihat.
 --}}
 @props(['active' => null])
 @php
 $navItems = [
-    ['key' => 'dashboard',       'label' => 'Dashboard',   'icon' => 'fa-solid fa-gauge-high',    'href' => route('dashboard'),              'role' => null],
-    ['key' => 'products',        'label' => 'Produk',      'icon' => 'fa-solid fa-boxes-stacked',  'href' => route('products.index'),         'role' => null],
-    ['key' => 'stock-mutations', 'label' => 'Mutasi Stok', 'icon' => 'fa-solid fa-right-left',     'href' => route('stock-mutations.index'),  'role' => null],
-    ['key' => 'reports',         'label' => 'Laporan',     'icon' => 'fa-solid fa-chart-column',   'href' => route('reports.index'),          'role' => null],
+    // ── Utama ──────────────────────────────────────────────────────────────
+    ['key' => 'dashboard',       'label' => 'Dashboard',          'icon' => 'fa-solid fa-gauge-high',       'href' => route('dashboard'),              'role' => null],
+
+    // ── Inventori ───────────────────────────────────────────────────────────
+    ['key' => 'products',        'label' => 'Produk',             'icon' => 'fa-solid fa-boxes-stacked',    'href' => route('products.index'),         'role' => null],
+    ['key' => 'stock-mutations', 'label' => 'Mutasi Stok',        'icon' => 'fa-solid fa-right-left',       'href' => route('stock-mutations.index'),  'role' => null],
+    ['key' => 'categories',      'label' => 'Kategori',           'icon' => 'fa-solid fa-tag',              'href' => route('categories.index'),       'role' => ['Super Admin', 'Staff Gudang']],
+    ['key' => 'suppliers',       'label' => 'Supplier',           'icon' => 'fa-solid fa-truck',            'href' => route('suppliers.index'),        'role' => ['Super Admin', 'Staff Gudang']],
+
+    // ── Transaksi & Permintaan ──────────────────────────────────────────────
+    ['key' => 'item-requests',   'label' => 'Permintaan Barang',  'icon' => 'fa-solid fa-inbox',            'href' => route('item-requests.index'),    'role' => null],
+    ['key' => 'cart',            'label' => 'Keranjang',          'icon' => 'fa-solid fa-cart-shopping',    'href' => route('cart.index'),             'role' => null],
+    ['key' => 'transactions',    'label' => 'Transaksi',          'icon' => 'fa-solid fa-receipt',          'href' => route('transactions.index'),     'role' => null],
+
+    // ── Kendaraan ───────────────────────────────────────────────────────────
+    ['key' => 'vehicles',        'label' => 'Master Kendaraan',   'icon' => 'fa-solid fa-car',              'href' => route('vehicles.index'),         'role' => ['Super Admin', 'Staff Gudang']],
+    ['key' => 'vehicle-loans',   'label' => 'Peminjaman Kendaraan','icon' => 'fa-solid fa-key',             'href' => route('vehicle-loans.index'),    'role' => null],
+
+    // ── Manajemen ───────────────────────────────────────────────────────────
+    ['key' => 'users',           'label' => 'Kelola User',        'icon' => 'fa-solid fa-users-gear',       'href' => route('users.index'),            'role' => ['Super Admin', 'Staff Gudang']],
+    ['key' => 'roles',           'label' => 'Roles & Permission', 'icon' => 'fa-solid fa-shield-halved',    'href' => route('roles.index'),            'role' => ['Super Admin']],
+
+    // ── Laporan ─────────────────────────────────────────────────────────────
+    ['key' => 'reports',         'label' => 'Laporan',            'icon' => 'fa-solid fa-chart-column',     'href' => route('reports.index'),          'role' => null],
 ];
 $current = $active ?? request()->segment(1);
 @endphp
@@ -44,7 +64,12 @@ $current = $active ?? request()->segment(1);
 
     <nav class="space-y-1">
         @foreach ($navItems as $item)
-            @if (!$item['role'] || (auth()->check() && auth()->user()->hasRole($item['role'])))
+            @php
+                // role null = semua role boleh.
+                // role berupa array = cek hasAnyRole.
+                $canSee = !$item['role'] || (auth()->check() && auth()->user()->hasAnyRole($item['role']));
+            @endphp
+            @if($canSee)
                 <a
                     href="{{ $item['href'] }}"
                     @click="$store.sidebar.open = false"
@@ -59,4 +84,15 @@ $current = $active ?? request()->segment(1);
             @endif
         @endforeach
     </nav>
+
+    {{-- Profil cepat di bawah sidebar --}}
+    <div class="mt-6 border-t border-white/10 pt-4">
+        <a href="{{ route('profile.index') }}"
+           @click="$store.sidebar.open = false"
+           class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-slate-300 hover:bg-slate-700/40 hover:text-slate-100 transition
+               {{ $current === 'profile' ? 'bg-brand-500/10 text-brand-400 border border-brand-500/20' : '' }}">
+            <i class="fa-solid fa-circle-user w-4 text-center"></i>
+            <span>Ubah Akun</span>
+        </a>
+    </div>
 </aside>

@@ -6,13 +6,21 @@ use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Models\Category;
 use App\Models\Product;
+use Illuminate\Http\Request;
 use App\Models\Supplier;
 
 class ProductController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::with(['category', 'supplier'])->paginate(10);
+        $products = Product::with(['category', 'supplier'])
+            ->when($request->search, fn($q) => $q
+                ->where('name', 'like', "%{$request->search}%")
+                ->orWhere('sku', 'like', "%{$request->search}%")
+                ->orWhereHas('category', fn($c) => $c->where('name', 'like', "%{$request->search}%"))
+            )
+            ->paginate(10)
+            ->withQueryString();
 
         return view('products.index', compact('products'));
     }
