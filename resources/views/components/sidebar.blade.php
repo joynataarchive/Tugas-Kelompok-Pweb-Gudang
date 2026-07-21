@@ -12,10 +12,10 @@
 @props(['active' => null])
 @php
 $navItems = [
-    ['key' => 'dashboard',       'label' => 'Dashboard',   'icon' => 'fa-solid fa-gauge-high',    'href' => url('/dashboard'),       'role' => null],
-    ['key' => 'products',        'label' => 'Produk',      'icon' => 'fa-solid fa-boxes-stacked',  'href' => route('products.index'), 'role' => null],
-    ['key' => 'stock-mutations', 'label' => 'Mutasi Stok', 'icon' => 'fa-solid fa-right-left',     'href' => route('stock-mutations.index'), 'role' => null],
-    ['key' => 'reports',         'label' => 'Laporan',     'icon' => 'fa-solid fa-chart-column',   'href' => url('/reports'),         'role' => 'Super Admin'],
+    ['key' => 'dashboard',       'label' => 'Dashboard',   'icon' => 'fa-solid fa-gauge-high',    'href' => route('dashboard'),              'role' => null],
+    ['key' => 'products',        'label' => 'Produk',      'icon' => 'fa-solid fa-boxes-stacked',  'href' => route('products.index'),         'role' => null],
+    ['key' => 'stock-mutations', 'label' => 'Mutasi Stok', 'icon' => 'fa-solid fa-right-left',     'href' => route('stock-mutations.index'),  'role' => null],
+    ['key' => 'reports',         'label' => 'Laporan',     'icon' => 'fa-solid fa-chart-column',   'href' => route('reports.index'),          'role' => null],
 ];
 $current = $active ?? request()->segment(1);
 @endphp

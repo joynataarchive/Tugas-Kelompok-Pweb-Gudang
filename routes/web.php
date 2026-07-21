@@ -1,18 +1,31 @@
 <?php
 
-use App\Http\Controllers\ProductController;
-use App\Http\Controllers\StockMutationController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\StockMutationController;
 use Illuminate\Support\Facades\Route;
 
-// Redirect root to products or login based on auth status
+// ---------------------------------------------------------------------------
+// Public routes
+// ---------------------------------------------------------------------------
+
+// Landing page — dapat diakses tanpa login
+Route::get('/landing', function () {
+    return view('landing');
+})->name('landing');
+
+// Root: redirect ke dashboard (jika sudah login) atau ke login
 Route::get('/', function () {
     return auth()->check()
-        ? redirect()->route('products.index')
+        ? redirect()->route('dashboard')
         : redirect()->route('login');
 });
 
-// Authentication routes
+// ---------------------------------------------------------------------------
+// Authentication routes (only for guests)
+// ---------------------------------------------------------------------------
 Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [LoginController::class, 'login']);
@@ -23,21 +36,26 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout')->midd
 // TEMP buat testing - HAPUS sebelum push/merge ke main
 Route::get('/dev-login', function () {
     auth()->login(\App\Models\User::factory()->create());
-    return redirect('/products');
+    return redirect()->route('dashboard');
 });
 
-// Routes protected by authentication
+// ---------------------------------------------------------------------------
+// Authenticated routes
+// ---------------------------------------------------------------------------
 Route::middleware('auth')->group(function () {
+    // Dashboard — semua role yang sudah login
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    // Produk & Mutasi Stok (Role 2)
     Route::resource('products', ProductController::class)->except('show');
     Route::resource('stock-mutations', StockMutationController::class)->only(['index', 'create', 'store']);
 
-    // Contoh pembatasan rute per peran (Spatie RBAC middleware)
-    Route::middleware('role:Super Admin')->group(function () {
-        // Contoh rute khusus Super Admin
-        // Route::get('/reports', [ReportController::class, 'index']);
-    });
+    // Laporan — semua role yang sudah login boleh melihat preview
+    Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
 
-    Route::middleware('role:Super Admin|Staff Gudang')->group(function () {
-        // Contoh rute yang bisa diakses Super Admin & Staff Gudang
-    });
+    // Ekspor PDF — hanya Super Admin
+    Route::get('/reports/export-pdf', [ReportController::class, 'exportPdf'])
+        ->name('reports.export-pdf')
+        ->middleware('role:Super Admin');
 });
+

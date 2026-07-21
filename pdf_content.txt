@@ -1,0 +1,15 @@
+﻿python : Traceback (most recent call last):
+At line:1 char:1
++ python read_pdf.py 2>&1 | Out-File -FilePath "pdf_content.txt" -Encod ...
++ ~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Traceback (most recent call last)::String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  File "C:\laragon\www\Tugas-Kelompok-Pweb-Gudang\read_pdf.py", line 2, in <module>
+    reader = PdfReader(r'c:\laragon\www\Tugas-Kelompok-Pweb-Gudang\Gabungan_Dokumen_GudangSaaS.pdf')
+  File "C:\laragon\bin\python\python-3.10\lib\site-packages\pypdf\_reader.py", line 151, in __init__
+    self._initialize_stream(stream)
+  File "C:\laragon\bin\python\python-3.10\lib\site-packages\pypdf\_reader.py", line 172, in _initialize_stream
+    with open(stream, "rb") as fh:
+FileNotFoundError: [Errno 2] No such file or directory: 
+'c:\\laragon\\www\\Tugas-Kelompok-Pweb-Gudang\\Gabungan_Dokumen_GudangSaaS.pdf'
