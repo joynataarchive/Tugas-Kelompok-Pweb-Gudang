@@ -29,3 +29,7 @@
     @apply bg-slate-800/30 backdrop-blur-sm border border-white/10 rounded-xl shadow-md p-4;
   }
 }
+
+[x-cloak] {
+  display: none !important;
+}

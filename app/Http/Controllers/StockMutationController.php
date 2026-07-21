@@ -5,16 +5,22 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreStockMutationRequest;
 use App\Models\Product;
 use App\Models\StockMutation;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
 class StockMutationController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $mutations = StockMutation::with(['product', 'user'])
+            ->when($request->search, fn($q) => $q->whereHas('product', fn($p) =>
+                $p->where('name', 'like', "%{$request->search}%")
+            ))
+            ->when($request->type, fn($q) => $q->where('type', $request->type))
             ->latest()
-            ->paginate(10);
+            ->paginate(10)
+            ->withQueryString();
 
         return view('stock-mutations.index', compact('mutations'));
     }
