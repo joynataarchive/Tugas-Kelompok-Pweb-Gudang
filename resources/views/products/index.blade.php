@@ -6,7 +6,7 @@
     {{-- Header --}}
     <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h1 class="text-2xl font-bold text-slate-100">Daftar Produk</h1>
-        @hasanyrole('Super Admin|Staff Gudang')
+        @hasanyrole('Super Admin|Staff Gudang|Supplier')
         <a href="{{ route('products.create') }}"
            class="inline-flex items-center gap-2 rounded-xl bg-brand-600 px-4 py-2 text-sm font-semibold text-white hover:bg-brand-500 transition">
             <i class="fa-solid fa-plus"></i> Tambah Produk
@@ -86,7 +86,7 @@
                                         </button>
                                     </form>
 
-                                    @hasanyrole('Super Admin|Staff Gudang')
+                                    @hasanyrole('Super Admin|Staff Gudang|Supplier')
                                     <a href="{{ route('products.edit', $product) }}" class="text-brand-400 hover:text-brand-300 text-sm transition">
                                         <i class="fa-solid fa-pen-to-square mr-1"></i>Edit
                                     </a>
