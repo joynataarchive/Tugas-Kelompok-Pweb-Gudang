@@ -13,12 +13,12 @@
 
     <x-card>
         <form method="POST" action="{{ isset($user) ? route('users.update', $user) : route('users.store') }}"
-              x-data="{ role: '{{ old('role', $user->roles->first()?->name ?? '') }}' }">
+              x-data="{ role: '{{ old('role', isset($user) ? ($user->roles->first()?->name ?? '') : '') }}' }">
             @csrf
             @if(isset($user)) @method('PUT') @endif
 
-            <x-input label="Nama Lengkap" name="name" :value="old('name', $user->name ?? '')" placeholder="Nama user" />
-            <x-input label="Email" name="email" type="email" :value="old('email', $user->email ?? '')" placeholder="email@example.com" />
+            <x-input label="Nama Lengkap" name="name" :value="old('name', isset($user) ? $user->name : '')" placeholder="Nama user" />
+            <x-input label="Email" name="email" type="email" :value="old('email', isset($user) ? $user->email : '')" placeholder="email@example.com" />
             <x-input
                 label="{{ isset($user) ? 'Password Baru (kosongkan jika tidak diubah)' : 'Password' }}"
                 name="password" type="password"
@@ -31,7 +31,7 @@
                 <select name="role" x-model="role"
                     class="w-full rounded-xl bg-slate-800/50 border border-white/10 text-slate-100 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/60">
                     @foreach($roles as $r)
-                        <option value="{{ $r->name }}" @selected(old('role', $user->roles->first()?->name ?? '') === $r->name)>
+                        <option value="{{ $r->name }}" @selected(old('role', isset($user) ? ($user->roles->first()?->name ?? '') : '') === $r->name)>
                             {{ $r->name }}
                         </option>
                     @endforeach
@@ -46,7 +46,7 @@
                     class="w-full rounded-xl bg-slate-800/50 border border-white/10 text-slate-100 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/60">
                     <option value="">— Pilih Supplier —</option>
                     @foreach($suppliers as $s)
-                        <option value="{{ $s->id }}" @selected(old('supplier_id', $user->supplier_id ?? '') == $s->id)>
+                        <option value="{{ $s->id }}" @selected(old('supplier_id', isset($user) ? $user->supplier_id : '') == $s->id)>
                             {{ $s->name }}
                         </option>
                     @endforeach
