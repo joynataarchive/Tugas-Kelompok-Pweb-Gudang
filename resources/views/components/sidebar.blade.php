@@ -23,7 +23,6 @@ $navItems = [
 
     // ── Transaksi & Permintaan ──────────────────────────────────────────────
     ['key' => 'item-requests',   'label' => 'Permintaan Barang',  'icon' => 'fa-solid fa-inbox',            'href' => route('item-requests.index'),    'role' => null],
-    ['key' => 'cart',            'label' => 'Keranjang',          'icon' => 'fa-solid fa-cart-shopping',    'href' => route('cart.index'),             'role' => null],
     ['key' => 'transactions',    'label' => 'Transaksi',          'icon' => 'fa-solid fa-receipt',          'href' => route('transactions.index'),     'role' => null],
 
     // ── Kendaraan ───────────────────────────────────────────────────────────

@@ -74,18 +74,6 @@
                             </td>
                             <td class="py-2.5 text-right">
                                 <div class="inline-flex items-center gap-2">
-                                    {{-- Tambah ke Keranjang --}}
-                                    <form action="{{ route('cart.add') }}" method="POST" class="inline">
-                                        @csrf
-                                        <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                        <input type="hidden" name="quantity" value="1">
-                                        <button type="submit"
-                                            class="inline-flex items-center gap-1 rounded-lg bg-brand-600/20 border border-brand-500/30 px-2 py-1 text-xs font-medium text-brand-300 hover:bg-brand-600/40 transition"
-                                            @if($product->stock <= 0) disabled title="Stok habis" @endif>
-                                            <i class="fa-solid fa-cart-plus"></i>
-                                        </button>
-                                    </form>
-
                                     @hasanyrole('Super Admin|Staff Gudang|Supplier')
                                     <a href="{{ route('products.edit', $product) }}" class="text-brand-400 hover:text-brand-300 text-sm transition">
                                         <i class="fa-solid fa-pen-to-square mr-1"></i>Edit
