@@ -31,7 +31,7 @@ $navItems = [
     ['key' => 'vehicle-loans',   'label' => 'Peminjaman Kendaraan','icon' => 'fa-solid fa-key',             'href' => route('vehicle-loans.index'),    'role' => null],
 
     // ── Manajemen ───────────────────────────────────────────────────────────
-    ['key' => 'users',           'label' => 'Kelola User',        'icon' => 'fa-solid fa-users-gear',       'href' => route('users.index'),            'role' => ['Super Admin', 'Staff Gudang']],
+    ['key' => 'users',           'label' => 'Kelola User',        'icon' => 'fa-solid fa-users-gear',       'href' => route('users.index'),            'role' => ['Super Admin']],
     ['key' => 'roles',           'label' => 'Roles & Permission', 'icon' => 'fa-solid fa-shield-halved',    'href' => route('roles.index'),            'role' => ['Super Admin']],
 
     // ── Laporan ─────────────────────────────────────────────────────────────

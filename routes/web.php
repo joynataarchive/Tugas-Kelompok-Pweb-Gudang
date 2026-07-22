@@ -71,7 +71,6 @@ Route::middleware('auth')->group(function () {
     Route::middleware('role:Super Admin|Staff Gudang')->group(function () {
         Route::resource('categories', CategoryController::class)->except('show');
         Route::resource('suppliers', SupplierController::class)->except('show');
-        Route::resource('users', UserController::class)->except('show');
         Route::resource('vehicles', VehicleController::class)->except('show');
     });
 
@@ -80,6 +79,7 @@ Route::middleware('auth')->group(function () {
     // -----------------------------------------------------------------------
     Route::middleware('role:Super Admin')->group(function () {
         Route::resource('roles', RoleController::class)->except('show');
+        Route::resource('users', UserController::class)->except('show');
     });
 
     // -----------------------------------------------------------------------
