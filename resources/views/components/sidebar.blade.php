@@ -23,7 +23,6 @@ $navItems = [
 
     // ── Transaksi & Permintaan ──────────────────────────────────────────────
     ['key' => 'item-requests',   'label' => 'Permintaan Barang',  'icon' => 'fa-solid fa-inbox',            'href' => route('item-requests.index'),    'role' => null],
-    ['key' => 'transactions',    'label' => 'Transaksi',          'icon' => 'fa-solid fa-receipt',          'href' => route('transactions.index'),     'role' => null],
 
     // ── Kendaraan ───────────────────────────────────────────────────────────
     ['key' => 'vehicles',        'label' => 'Master Kendaraan',   'icon' => 'fa-solid fa-car',              'href' => route('vehicles.index'),         'role' => ['Super Admin', 'Staff Gudang']],
