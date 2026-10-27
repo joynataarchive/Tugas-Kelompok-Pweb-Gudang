@@ -25,7 +25,7 @@ Route::get('/landing', fn() => view('landing'))->name('landing');
 Route::get('/', function () {
     return auth()->check()
         ? redirect()->route('dashboard')
-        : redirect()->route('login');
+        : view('landing');
 });
 
 // ---------------------------------------------------------------------------
